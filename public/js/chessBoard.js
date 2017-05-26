@@ -2,9 +2,9 @@ var NUMBER_OF_COLS = 8,
 	NUMBER_OF_ROWS = 8,
 	BLOCK_SIZE = 100;
 
-var BLOCK_COLOUR_1 = '#9f7119',
-	BLOCK_COLOUR_2 = '#debf83',
-	HIGHLIGHT_COLOUR = '#fb0006';
+var BLOCK_COLOR_1 = '#9f7119',
+	BLOCK_COLOR_2 = '#debf83',
+	HIGHLIGHT_COLOR = '#fb0006';
 
 var piecePositions = null;
 
@@ -100,31 +100,26 @@ function canSelectedMoveToBlock(selectedPiece, clickedBlock, enemyPiece) {
 
 	case PIECE_CASTLE:
 
-		// TODO
 
 		break;
 
 	case PIECE_ROUKE:
 
-		// TODO
 
 		break;
 
 	case PIECE_BISHOP:
 
-		// TODO
 
 		break;
 
 	case PIECE_QUEEN:
 
-		// TODO
 
 		break;
 
 	case PIECE_KING:
 
-		// TODO
 
 		break;
 	}
@@ -142,21 +137,18 @@ function getPieceAtBlock(clickedBlock) {
 function getBlockColour(iRowCounter, iBlockCounter) {
 	var cStartColour;
 
-	// Alternate the block colour
 	if (iRowCounter % 2) {
-		cStartColour = (iBlockCounter % 2 ? BLOCK_COLOUR_1 : BLOCK_COLOUR_2);
+		cStartColour = (iBlockCounter % 2 ? BLOCK_COLOR_1 : BLOCK_COLOR_2);
 	} else {
-		cStartColour = (iBlockCounter % 2 ? BLOCK_COLOUR_2 : BLOCK_COLOUR_1);
+		cStartColour = (iBlockCounter % 2 ? BLOCK_COLOR_2 : BLOCK_COLOR_1);
 	}
 
 	return cStartColour;
 }
 
 function drawBlock(iRowCounter, iBlockCounter) {
-	// Set the background
 	ctx.fillStyle = getBlockColour(iRowCounter, iBlockCounter);
 
-	// Draw rectangle for the background
 	ctx.fillRect(iRowCounter * BLOCK_SIZE, iBlockCounter * BLOCK_SIZE,
 		BLOCK_SIZE, BLOCK_SIZE);
 
@@ -177,7 +169,6 @@ function drawPiece(curPiece, bBlackTeam) {
 
 	var imageCoords = getImageCoords(curPiece.piece, bBlackTeam);
 
-	// Draw the piece onto the canvas
 	ctx.drawImage(pieces,
 		imageCoords.x, imageCoords.y,
 		BLOCK_SIZE, BLOCK_SIZE,
@@ -193,7 +184,6 @@ function removeSelection(selectedPiece) {
 function drawTeamOfPieces(teamOfPieces, bBlackTeam) {
 	var iPieceCounter;
 
-	// Loop through each piece and draw it on the canvas
 	for (iPieceCounter = 0; iPieceCounter < teamOfPieces.length; iPieceCounter++) {
 		drawPiece(teamOfPieces[iPieceCounter], bBlackTeam);
 	}
@@ -207,7 +197,6 @@ function drawPieces() {
 function drawRow(iRowCounter) {
 	var iBlockCounter;
 
-	// Draw 8 block left to right
 	for (iBlockCounter = 0; iBlockCounter < NUMBER_OF_ROWS; iBlockCounter++) {
 		drawBlock(iRowCounter, iBlockCounter);
 	}
@@ -220,7 +209,6 @@ function drawBoard() {
 		drawRow(iRowCounter);
 	}
 
-	// Draw outline
 	ctx.lineWidth = 3;
 	ctx.strokeRect(0, 0,
 		NUMBER_OF_ROWS * BLOCK_SIZE,
@@ -431,9 +419,8 @@ function defaultPositions() {
 }
 
 function selectPiece(pieceAtBlock) {
-	// Draw outline
 	ctx.lineWidth = SELECT_LINE_WIDTH;
-	ctx.strokeStyle = HIGHLIGHT_COLOUR;
+	ctx.strokeStyle = HIGHLIGHT_COLOR;
 	ctx.strokeRect((pieceAtBlock.col * BLOCK_SIZE) + SELECT_LINE_WIDTH,
 		(pieceAtBlock.row * BLOCK_SIZE) + SELECT_LINE_WIDTH,
 		BLOCK_SIZE - (SELECT_LINE_WIDTH * 2),
@@ -451,7 +438,6 @@ function checkIfPieceClicked(clickedBlock) {
 }
 
 function movePiece(clickedBlock, enemyPiece) {
-	// Clear the block in the original position
 	drawBlock(selectedPiece.col, selectedPiece.row);
 
 	var team = (currentTurn === WHITE_TEAM ? json.white : json.black),
@@ -461,12 +447,10 @@ function movePiece(clickedBlock, enemyPiece) {
 	team[selectedPiece.position].row = clickedBlock.row;
 
 	if (enemyPiece !== null) {
-		// Clear the piece your about to take
 		drawBlock(enemyPiece.col, enemyPiece.row);
 		opposite[enemyPiece.position].status = TAKEN;
 	}
 
-	// Draw the piece in the new position
 	drawPiece(selectedPiece, (currentTurn === BLACK_TEAM));
 
 	currentTurn = (currentTurn === WHITE_TEAM ? BLACK_TEAM : WHITE_TEAM);
@@ -499,23 +483,18 @@ function board_click(ev) {
 }
 
 function draw() {
-	// Main entry point got the HTML5 chess board example
 
 	canvas = document.getElementById('chess');
 
-	// Canvas supported?
 	if (canvas.getContext) {
 		ctx = canvas.getContext('2d');
 
-		// Calculdate the precise block size
 		BLOCK_SIZE = canvas.height / NUMBER_OF_ROWS;
 
-		// Draw the background
 		drawBoard();
 
 		defaultPositions();
 
-		// Draw pieces
 		pieces = new Image();
 		pieces.src = 'pieces.png';
 		pieces.onload = drawPieces;
